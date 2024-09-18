@@ -132,7 +132,7 @@ class InternVLChatModel(PreTrainedModel):
         self.language_model.enable_input_require_grads()
         self.language_model.print_trainable_parameters()
 
-    def set_image_token(IMG_CONTEXT_TOKEN, tokenizer):
+    def set_image_token(self, IMG_CONTEXT_TOKEN, tokenizer):
         img_context_token_id = tokenizer.convert_tokens_to_ids(IMG_CONTEXT_TOKEN)
         self.img_context_token_id = img_context_token_id
 
