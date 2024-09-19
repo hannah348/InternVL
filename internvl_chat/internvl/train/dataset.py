@@ -601,7 +601,8 @@ def preprocess_internlm(
         group_by_length: bool = False,
         use_packed_ds: bool = False,
         ds_name: str = None,
-        num_image: int = 1
+        num_image: int = 1, 
+        max_length: int = None
 ) -> Dict:
     conv = get_conv_template(template_name)
     roles = {'human': conv.roles[0], 'gpt': conv.roles[1]}
@@ -629,13 +630,14 @@ def preprocess_internlm(
                 conversation = conversation.replace('<image>', image_tokens, 1)
             new_conversations.append(conversation)
         conversations = new_conversations
-
+    if max_length is None:
+        max_length  = tokenizer.model_max_length
     # Tokenize conversations
     input_ids = tokenizer(
         conversations,
         return_tensors='pt',
         padding=False if group_by_length or use_packed_ds else 'max_length',
-        max_length=tokenizer.model_max_length,
+        max_length=max_length,
         truncation=True,
     ).input_ids
     targets = input_ids.clone()
@@ -672,7 +674,7 @@ def preprocess_internlm(
         if cur_len < tokenizer.model_max_length:
             if cur_len != total_len:
                 target[:] = IGNORE_TOKEN_ID
-                print(f'WARNING: tokenization mismatch: {cur_len} vs. {total_len}. This dataset is {ds_name}.')
+                # print(f'WARNING: tokenization mismatch: {cur_len} vs. {total_len}. This dataset is {ds_name}.')
                 sys.stdout.flush()
 
     return dict(
