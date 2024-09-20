@@ -154,10 +154,12 @@ class InternVLChatModel(PreTrainedModel):
 
         image_flags = image_flags.squeeze(-1)
         input_embeds = self.language_model.get_input_embeddings()(input_ids).clone()
-
+        print("pixel_values", pixel_values.shape)
         vit_embeds = self.extract_feature(pixel_values)
         vit_embeds = vit_embeds[image_flags == 1]
         vit_batch_size = pixel_values.shape[0]
+        print("vit_embeds", vit_embeds.shape)
+
 
         B, N, C = input_embeds.shape
         input_embeds = input_embeds.reshape(B * N, C)

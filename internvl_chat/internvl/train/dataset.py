@@ -626,6 +626,7 @@ def preprocess_internlm(
         new_conversations = []
         for conversation in conversations:
             for i in range(num_image):
+                print(f"Adding {num_image_token_list[i]} image tokens")
                 image_tokens = f'{IMG_START_TOKEN}{IMG_CONTEXT_TOKEN * num_image_token_list[i]}{IMG_END_TOKEN}'
                 conversation = conversation.replace('<image>', image_tokens, 1)
             new_conversations.append(conversation)
