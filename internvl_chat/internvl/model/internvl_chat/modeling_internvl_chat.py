@@ -180,6 +180,10 @@ class InternVLChatModel(PreTrainedModel):
 
         input_embeds = input_embeds.reshape(B, N, C)
 
+        assert not torch.any(torch.isnan(input_embeds))
+        assert not torch.any(torch.isnan(position_ids))
+        assert not torch.any(torch.isnan(attention_mask))
+
         outputs = self.language_model(
             inputs_embeds=input_embeds,
             attention_mask=attention_mask,
