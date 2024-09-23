@@ -158,7 +158,8 @@ class InternVLChatModel(PreTrainedModel):
         vit_embeds = vit_embeds[image_flags == 1]
         vit_batch_size = pixel_values.shape[0]
 
-        print(vit_embeds[0] == vit_embeds)
+
+        print((vit_embeds[0] == vit_embeds).all(dim=1).all(dim=1))
 
 
         B, N, C = input_embeds.shape
@@ -258,6 +259,9 @@ class InternVLChatModel(PreTrainedModel):
         vit_embeds = vit_embeds.reshape(vit_embeds.shape[0], h, w, -1)
         vit_embeds = self.pixel_shuffle(vit_embeds, scale_factor=self.downsample_ratio)
         vit_embeds = vit_embeds.reshape(vit_embeds.shape[0], -1, vit_embeds.shape[-1])
+        print(self.select_layer)
+        print((vit_embeds[0] == vit_embeds).all(dim=1).all(dim=1))
+
         vit_embeds = self.mlp1(vit_embeds)
         return vit_embeds
 
