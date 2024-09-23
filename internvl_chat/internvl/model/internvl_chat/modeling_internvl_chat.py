@@ -158,8 +158,7 @@ class InternVLChatModel(PreTrainedModel):
         vit_embeds = vit_embeds[image_flags == 1]
         vit_batch_size = pixel_values.shape[0]
 
-
-        print((vit_embeds[0] == vit_embeds).all(dim=1).all(dim=1))
+        print("vit_embeds {}".format((vit_embeds[0] == vit_embeds).all(dim=1).all(dim=1)))
 
 
         B, N, C = input_embeds.shape
@@ -183,7 +182,8 @@ class InternVLChatModel(PreTrainedModel):
 
         input_embeds = input_embeds.reshape(B, N, C)
 
-        print("input_embeds", (input_embeds[0] == input_embeds).all(dim=1).all(dim=1))
+        print("input_embeds {}".format(input_embeds.shape))
+        print("input_embeds {}".format((input_embeds[0] == input_embeds).all(dim=1).all(dim=1)))
 
         assert not torch.any(torch.isnan(input_embeds))
         assert not torch.any(torch.isnan(position_ids))
@@ -261,8 +261,8 @@ class InternVLChatModel(PreTrainedModel):
         vit_embeds = vit_embeds.reshape(vit_embeds.shape[0], h, w, -1)
         vit_embeds = self.pixel_shuffle(vit_embeds, scale_factor=self.downsample_ratio)
         vit_embeds = vit_embeds.reshape(vit_embeds.shape[0], -1, vit_embeds.shape[-1])
-        print(self.select_layer)
-        print((vit_embeds[0] == vit_embeds).all(dim=1).all(dim=1))
+        # print(self.select_layer)
+        #print((vit_embeds[0] == vit_embeds).all(dim=1).all(dim=1))
 
         vit_embeds = self.mlp1(vit_embeds)
         return vit_embeds
